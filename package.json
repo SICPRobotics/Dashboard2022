@@ -20,6 +20,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "5.0.0",
+    "react-simple-code-editor": "^0.11.0",
     "typescript": "^4.5.5",
     "web-vitals": "^2.1.4"
   },
@@ -28,8 +29,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "postinstall": "electron-builder install-app-deps",
-    "electron:dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
-    "electron:build": "yarn build && tsc -p electron && electron-builder",
+    "electron:dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
+    "electron:build": "npm build && tsc -p electron && electron-builder",
     "eject": "react-scripts eject"
   },
   "build": {
