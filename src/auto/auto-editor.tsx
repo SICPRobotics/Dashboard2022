@@ -2,11 +2,7 @@ import React, { CSSProperties, useRef } from "react";
 import { useState } from "react"
 import Editor from 'react-simple-code-editor';
 import { Loading } from "../loading";
-import { useAuto } from "./hooks";
-
-interface Props {
-    name: string
-}
+import { useAutos } from "./hooks";
 
 const instructionStyle: CSSProperties = {
     color: 'orange'
@@ -22,7 +18,8 @@ const suffixStyle: CSSProperties = {
 
 const textAreaStyle: CSSProperties = {
     resize: 'none',
-    opacity: 0
+    color: 'white',
+    background: 'none'
 }
 
 const preStyle: CSSProperties = {
@@ -46,24 +43,23 @@ const padding: CSSProperties = {
     padding: 5
 }
 
-export const AutoEditor = (props: Props) => {
-    const [code, setCode] = useAuto(props.name)
-    
-    if (code === null) {
-        return <Loading />
-    }
+interface Props {
+    value: string,
+    onChange: (code: string) => void
+}
 
+export const AutoEditor = (props: Props) => {
     return <>
         <div style={{ position: 'relative', ...padding }}>
-            <pre style={{ ...sharedStyle, ...preStyle, ...padding }}>{applySyntaxHighlighting(code)}</pre>
+            <pre style={{ ...sharedStyle, ...preStyle, ...padding }}>{applySyntaxHighlighting(props.value)}</pre>
             <textarea
                 style={{ ...sharedStyle, ...textAreaStyle }}
-                rows={code.split('\n').length + 2}
-                onChange={e => setCode(e.target.value)}
+                rows={props.value.split('\n').length + 2}
+                onChange={e => props.onChange(e.target.value)}
                 spellCheck={false}
                 autoComplete={'none'}
                 autoCorrect={'none'}
-                value={code}/>
+                value={props.value}/>
         </div>
     </>
 }
@@ -103,6 +99,21 @@ function applySyntaxHighlighting(code: string) {
 
     applyStyles(/^\w+/gm, instructionStyle);
     applyStyles(/(\d+)([A-z]+)/gm, null, numberStyle, suffixStyle)
+
+    // Collapse styles
+    const finalStyles: {
+        style: CSSProperties,
+        start: number,
+        end: number
+    }[] = []
+
+    for (const styleA of styles) {
+        for (const styleB of finalStyles) {
+            const noConflict = styleA.start > styleB.end || styleA.end < styleB.start;
+
+            // TODO...
+        }
+    }
 
     const elements = [];
     elements.push(<span key={'start'}>{code.substring(0, styles[0]?.start)}</span>);

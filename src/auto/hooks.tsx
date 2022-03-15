@@ -1,28 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { readAuto, readAutoNames, writeAuto } from "../io";
+import { Autos, readAutos, writeAutos } from "../io";
 
-export const useAutoDir = () => {
-    const [autos, setAutos] = useState<string[] | null>(null);
-
-    useEffect(() => {
-        readAutoNames().then(val => setAutos(val))
-    }, []);
-
-    return [autos, setAutos] as const;
-}
-
-export const useAuto = (name: string) => {
-    const [auto, _setAuto] = useState<string | null>(null);
-    const ref = useRef<string | null>(null);
-    const setAuto = (code: string) => {
+export const useAutos = () => {
+    const [autos, _setAutos] = useState<Autos | null>(null);
+    const ref = useRef<Autos | null>(null);
+    const setAutos = (code: Autos) => {
         ref.current = code;
-        _setAuto(code);
+        _setAutos(code);
     }
 
     useEffect(() => {
-        readAuto(name).then(code => setAuto(code.toString()));
-        return () => { writeAuto(name, ref.current!) };
+        readAutos().then(setAutos);
+        return () => { writeAutos(ref.current!) };
     }, []);
 
-    return [auto, setAuto] as const;
+    return [autos, setAutos] as const;
 }

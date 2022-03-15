@@ -1,19 +1,13 @@
-import fs from 'fs/promises';
-
-const autoRoot = '/WolfbyteDashboard2022/auto/';
-const dirPromise = fs.mkdir(autoRoot, { recursive: true });
-
-export async function readAutoNames() {
-    await dirPromise;
-    return fs.readdir(autoRoot);
+export interface Autos {
+    [name: string]: string
 }
 
-export async function writeAuto(name: string, content: string) {
-    await dirPromise;
-    return fs.writeFile(autoRoot + name, content);
+
+export async function writeAutos(autos: Autos) {
+    // TODO some NT stuff
 }
 
-export async function readAuto(name: string) {
-    await dirPromise;
-    return fs.readFile(autoRoot + name);
+export async function readAutos() {
+    // TODO some NT stuff
+    return {};
 }

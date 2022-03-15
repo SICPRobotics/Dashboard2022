@@ -10,7 +10,8 @@ export const TempTextInput = (props: Props) => {
     const [text, setText] = useState(props.startValue ?? '');
 
     return <input
-        onChange={e => setText(e.target.value)}
+        autoFocus
+        onChange={e => !e.target.value.match(/\W/g) && setText(e.target.value)}
         onKeyDown={e => e.key == 'Escape' ? props.onCancel() : (e.key == 'Enter' ? props.onEnter(text) : '')}
         value={text}/>
 }
