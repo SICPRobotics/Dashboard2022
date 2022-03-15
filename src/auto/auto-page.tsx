@@ -6,11 +6,13 @@ import { TempTextInput } from "../temp-text-input";
 import { AutoEditor } from "./auto-editor";
 import { AutoFileTab } from "./auto-file-tab";
 import { useAutos } from "./hooks";
+import { AutoError } from "./parse-auto";
 
 export const AutoPage = () => {
     const [autos, setAutos] = useAutos();
     const [selected, setSelected] = useState<null | string>(null);
     const [addingNew, setAddingNew] = useState(false);
+    const [errors, setErrors] = useState<AutoError[]>([]);
 
     return <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -28,6 +30,9 @@ export const AutoPage = () => {
             {!autos ? <Loading /> : Object.keys(autos).map((val, i) => <TabButton isSelected={selected == val} onClick={() => setSelected(val)} key={i}>{val}</TabButton>)}
             <Button onClick={() => setAddingNew(true)}>Add new</Button>
         </div>
-        { selected ? <AutoEditor value={autos![selected]} onChange={val => setAutos({ ...autos, [selected]: val })} /> : '' }
+        { selected ? <AutoEditor value={autos![selected]} errors={errors} onChange={(val, { errors }) => {
+            setAutos({ ...autos, [selected]: val });
+            setErrors(errors)
+        }} /> : '' }
     </div>
 }

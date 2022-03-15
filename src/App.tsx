@@ -17,7 +17,12 @@ export function App() {
                 <TabButton isSelected={Tab == MainPage} onClick={() => setTab(MainPage)}>main</TabButton>
                 <TabButton isSelected={Tab == AutoPage} onClick={() => setTab(AutoPage)}>auto</TabButton>
             </div>
-            <Tab />
+            <div style={{ display: Tab == MainPage ? 'block' : 'none' }}>
+                <MainPage />
+            </div>
+            <div style={{ display: Tab == AutoPage ? 'block' : 'none' }}>
+                <AutoPage />
+            </div>
         </div>
     );
 }
