@@ -24,9 +24,10 @@ const errorStyle: CSSProperties = {
 
 const textAreaStyle: CSSProperties = {
     resize: 'none',
-    color: 'white',
+    color: 'transparent',
     background: 'none',
-    width: '100%'
+    width: '100%',
+    caretColor: 'white'
 }
 
 const preStyle: CSSProperties = {
@@ -35,7 +36,8 @@ const preStyle: CSSProperties = {
     top: 0,
     left: 0,
     bottom: 0,
-    right: 0
+    right: 0,
+    whiteSpace: 'break-spaces'
 }
 
 const sharedStyle: CSSProperties = {
@@ -82,14 +84,18 @@ export const AutoEditor = (props: Props) => {
             </div>
         </div>
         <div style={padding}>
-            <h2>Code Status</h2>
-            <div>
-                { props.errors.length == 0 ? 'Compiled successfully.' : `Failed to compile: ${props.errors.length} error${props.errors.length == 1 ? '' : 's'}`}
-            </div>
             <h2>Auto Reference</h2>
             <div style={codeWrapStyle}>
                 <pre style={sharedStyle}>
                     {applySyntaxHighlighting(autoHelp)}
+                </pre>
+            </div>
+
+            <h2>Code Status</h2>
+            <div>
+                { props.errors.length == 0 ? 'Compiled successfully.' : `Failed to compile: ${props.errors.length} error${props.errors.length == 1 ? '' : 's'}`}
+                <pre>
+                    { props.errors.map(err => `\nLine ${err.line + 1}: ${err.message}`) }
                 </pre>
             </div>
         </div>
@@ -109,8 +115,8 @@ function applySyntaxHighlighting(code: string, errors?: AutoError[]) {
             
             let captureIndex = 0;
             for (let i = 0; i < captureStyles.length; i++) {
-                if (match[i + 1]) {
-                    applyStyleToRange(captureStyles[i], match.index! + captureIndex, match.index! + match[i + 1].length);
+                if (match[i + 1] && captureStyles[i]) {
+                    applyStyleToRange(captureStyles[i], match.index! + captureIndex, match.index! + captureIndex + match[i + 1].length);
                 }
 
                 captureIndex += match[i + 1].length;
@@ -129,9 +135,11 @@ function applySyntaxHighlighting(code: string, errors?: AutoError[]) {
 
         throw 'getStyleAt never found a style'
     }
+
     function applyStyleToRange(style: CSSProperties, start: number, end: number) {
         styles[end] = getStyleAt(end);
         styles[start] = { ...getStyleAt(start), ...style };
+        console.log(`Applied ${style} to ${start} to ${end}`)
 
         for (let i = start + 1; i < end; i++) {
             if (styles[i]) {
@@ -141,7 +149,7 @@ function applySyntaxHighlighting(code: string, errors?: AutoError[]) {
     }
 
     applyStyles(/^\w+/gm, instructionStyle);
-    applyStyles(/(\d+)([A-z]+)/gm, null, numberStyle, suffixStyle);
+    applyStyles(/(\d+)([a-zA-Z]+)/gm, null, numberStyle, suffixStyle);
 
     const lineBreakIndexes = [0];
 
@@ -161,12 +169,12 @@ function applySyntaxHighlighting(code: string, errors?: AutoError[]) {
 
     const raisedStyles = Object.entries(styles);
 
+    console.log(styles);
+
     for (let i = 0; i < raisedStyles.length; i++) {
         const [_, style] = raisedStyles[i];
         const index = Number(raisedStyles[i][0]);
         const nextIndex = i < raisedStyles.length - 1 ? Number(raisedStyles[i + 1][0]) : undefined;
-
-        console.log(index + ' ' + nextIndex)
 
         elements.push(<span key={i} style={style}>{code.substring(index, nextIndex)}</span>);
     }

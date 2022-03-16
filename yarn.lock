@@ -5468,6 +5468,11 @@
   dependencies:
     "harmony-reflect" "^1.4.6"
 
+"ieee754@^1.1.8":
+  "integrity" "sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA=="
+  "resolved" "https://registry.npmjs.org/ieee754/-/ieee754-1.2.1.tgz"
+  "version" "1.2.1"
+
 "ignore@^4.0.6":
   "integrity" "sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg=="
   "resolved" "https://registry.npmjs.org/ignore/-/ignore-4.0.6.tgz"
@@ -10009,6 +10014,13 @@
   dependencies:
     "@types/trusted-types" "^2.0.2"
     "workbox-core" "6.5.0"
+
+"wpilib-nt-client@^1.7.2":
+  "integrity" "sha512-TpN3XAzJNcyHf6Ak3cTG09xmbSauloKkr9pEMeoaZ8EfrN8t/UapV48YONBBZhF8+RnJ+nk+Y3cC6NwM3KP33g=="
+  "resolved" "https://registry.npmjs.org/wpilib-nt-client/-/wpilib-nt-client-1.7.2.tgz"
+  "version" "1.7.2"
+  dependencies:
+    "ieee754" "^1.1.8"
 
 "wrap-ansi@^7.0.0":
   "integrity" "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q=="
