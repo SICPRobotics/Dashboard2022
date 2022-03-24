@@ -42,8 +42,7 @@ export interface ArmDown {
 
 export interface Intake {
     type: 'intake'
-    direction: 'in' | 'out'
-    duration: number
+    direction: 'in' | 'out' | 'off'
 }
 
 export type AutoCode = AutoInstruction[];
@@ -214,8 +213,7 @@ function parseLine(line: string): AutoInstruction {
     } else if (inst == 'intake') {
         return {
             type: 'intake',
-            direction: parseStringArg(args[0], 'in', 'out'),
-            duration: parseTimeArg(args[2])
+            direction: parseStringArg(args[0], 'in', 'out', 'off'),
         }
     } else {
         throw `Unknown instruction ${inst}`

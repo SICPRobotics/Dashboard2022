@@ -59,7 +59,7 @@ const padding: CSSProperties = {
 }
 
 interface Props {
-    value: string,
+    value?: string,
     errors: AutoError[]
     onChange: (code: string, compiled: CompiledAuto) => void
 }
@@ -73,7 +73,7 @@ export const AutoEditor = (props: Props) => {
                     <pre style={{ ...sharedStyle, ...preStyle }}>{applySyntaxHighlighting(props.value, props.errors)}</pre>
                     <textarea
                         style={{ ...sharedStyle, ...textAreaStyle }}
-                        rows={props.value.split('\n').length + 2}
+                        rows={(props.value?.split('\n').length ?? 0) + 1}
                         onChange={e => props.onChange(e.target.value, parseAuto(e.target.value))}
                         spellCheck={false}
                         autoComplete={'none'}
@@ -103,11 +103,18 @@ export const AutoEditor = (props: Props) => {
     </>
 }
 
-function applySyntaxHighlighting(code: string, errors?: AutoError[]) {
+function applySyntaxHighlighting(code?: string, errors?: AutoError[]) {
+    if (!code) {
+        return;
+    }
 
     const styles: CSSProperties[] = [{}];
 
     function applyStyles(regex: RegExp, style: CSSProperties | null, ...captureStyles: CSSProperties[]) {
+        if (!code) {
+            return;
+        }
+        
         for (const match of code.matchAll(regex)) {
             if (style) {
                 applyStyleToRange(style, match.index!, match.index! + match[0].length)
@@ -139,7 +146,6 @@ function applySyntaxHighlighting(code: string, errors?: AutoError[]) {
     function applyStyleToRange(style: CSSProperties, start: number, end: number) {
         styles[end] = getStyleAt(end);
         styles[start] = { ...getStyleAt(start), ...style };
-        console.log(`Applied ${style} to ${start} to ${end}`)
 
         for (let i = start + 1; i < end; i++) {
             if (styles[i]) {
@@ -168,8 +174,6 @@ function applySyntaxHighlighting(code: string, errors?: AutoError[]) {
     const elements = [];
 
     const raisedStyles = Object.entries(styles);
-
-    console.log(styles);
 
     for (let i = 0; i < raisedStyles.length; i++) {
         const [_, style] = raisedStyles[i];

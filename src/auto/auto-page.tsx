@@ -23,16 +23,22 @@ export const AutoPage = () => {
                     }
 
                     setAddingNew(false);
-                    setAutos({ ...autos, [val]: '' });
+                    setAutos({ ...autos, [val]: {
+                        source: '',
+                        instructions: []
+                    } });
                     setSelected(val);
                 }}
                 onCancel={() => setAddingNew(false)} /> }
             {!autos ? <Loading /> : Object.keys(autos).map((val, i) => <TabButton isSelected={selected == val} onClick={() => setSelected(val)} key={i}>{val}</TabButton>)}
             <Button onClick={() => setAddingNew(true)}>Add new</Button>
         </div>
-        { selected ? <AutoEditor value={autos![selected]} errors={errors} onChange={(val, { errors }) => {
-            setAutos({ ...autos, [selected]: val });
-            setErrors(errors)
+        { selected ? <AutoEditor value={autos![selected].source} errors={errors} onChange={(source, { instructions, errors }) => {
+            setAutos({ ...autos, [selected]: {
+                source,
+                instructions
+            }});
+            setErrors(errors);
         }} /> : '' }
     </div>
 }

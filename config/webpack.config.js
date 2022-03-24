@@ -199,6 +199,17 @@ module.exports = function (webpackEnv) {
     // These are the "entry points" to our application.
     // This means they will be the "root" imports that are included in JS bundle.
     entry: paths.appIndexJs,
+
+    externals: {
+      electron: "require('electron')",
+      child_process: "require('child_process')",
+      fs: "require('fs')",
+      path: "require('path')",
+      url: "require('url')",
+      net: "require('net')",
+      buffer: "require('buffer')"
+    },
+
     output: {
       // The build folder.
       path: paths.appBuild,
