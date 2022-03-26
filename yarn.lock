@@ -5468,11 +5468,6 @@
   dependencies:
     "harmony-reflect" "^1.4.6"
 
-"ieee754@^1.1.8":
-  "integrity" "sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA=="
-  "resolved" "https://registry.npmjs.org/ieee754/-/ieee754-1.2.1.tgz"
-  "version" "1.2.1"
-
 "ignore@^4.0.6":
   "integrity" "sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg=="
   "resolved" "https://registry.npmjs.org/ignore/-/ignore-4.0.6.tgz"
@@ -9785,9 +9780,8 @@
   dependencies:
     "string-width" "^4.0.0"
 
-"wolfbyte-networktables@^1.7.3":
-  "integrity" "sha512-WgylNDdgB5AkW3jN9u1QugXfH22wrAkGEsDyRs2zeFoKWjuTTszORdT/gm00+Lht2vEA/wGCT7ASVxeltYcGvg=="
-  "resolved" "https://registry.npmjs.org/wolfbyte-networktables/-/wolfbyte-networktables-1.7.3.tgz"
+"wolfbyte-networktables@file:../../../AppData/Roaming/npm/node_modules/wolfbyte-networktables":
+  "resolved" "file:../../../AppData/Roaming/npm/node_modules/wolfbyte-networktables"
   "version" "1.7.3"
   dependencies:
     "ieee754" "^1.1.8"
