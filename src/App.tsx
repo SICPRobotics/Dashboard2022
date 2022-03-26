@@ -6,6 +6,7 @@ import { MainPage } from './main/main-page';
 import { TabButton } from './tab-button';
 import { theme } from './theme';
 import { readAutoNames } from './util/file-io';
+import { ntClient, onNtChange } from './util/nt';
 import { usePartialState } from './util/use-partial-state';
 
 
@@ -26,7 +27,6 @@ export function App() {
 
 
     const [tab, setTab] = useState<AppTab>('main');
-    const [selectedAuto, setSelectedAuto] = useState<string | null>(null);
 
     return (
         <AppContextInst.Provider value={{
@@ -40,7 +40,7 @@ export function App() {
                     <TabButton isSelected={tab === 'main'} onClick={() => setTab('main')}>main</TabButton>
                     <TabButton isSelected={tab === 'auto'} onClick={() => setTab('auto')}>auto</TabButton>
                 </div>
-                {tab === 'auto' ? <AutoPage selected={selectedAuto} onSelectedChange={setSelectedAuto} /> : <MainPage />}
+                {tab === 'auto' ? <AutoPage selected={context.selectedAuto} onSelectedChange={selectedAuto => setContext({ selectedAuto })} /> : <MainPage />}
             </div>
         </AppContextInst.Provider>
     );

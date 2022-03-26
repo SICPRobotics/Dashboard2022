@@ -27,17 +27,17 @@ async function getFile(path: string) {
 }
 
 async function readFile(path: string) {
-    //const { content } = await getFile(path);
+    const { content } = await getFile(path);
 
-    /*if (content) {
+    if (content) {
         return content;
     } else {
-        const res = await fd.readFile({ encoding });
+        const res = await fs.readFile(path, { encoding });
         fds[nodePath.normalize(path)].content = res;
         return res;
-    }*/
+    }
 
-    return fs.readFile(path, { encoding });
+    //return fs.readFile(path, { encoding });
 }
 
 async function writeFile(path: string, data: string) {
@@ -57,6 +57,7 @@ async function writeFile(path: string, data: string) {
         console.log('started write ' + path);
         //await file.fd.writeFile(data);
         fs.writeFile(path, data);
+        fds[nodePath.normalize(path)].content = data;
         console.log('end write ' + path)
         file.currentlyWriting = false;
         const cb = file.pendingWriteRes ?? (() => {});
@@ -77,7 +78,6 @@ export async function readAuto(name: string): Promise<Auto> {
     try {
         const rawAuto = (await readFile(autoPath + name)).toString();
         const { instructions } = parseAuto(rawAuto);
-        eval("debugger");
 
         console.log(`Read auto ${name}: \n ${rawAuto}`)
 

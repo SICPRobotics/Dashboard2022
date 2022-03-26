@@ -5,6 +5,7 @@ export const ntClient = new Client();
 (window as any).client = ntClient;
 const networkTable: {[index: string]: any} = {};
 const ntPath = '/Wolfbyte/auto';
+ntClient.startDebug('nt', 3);
 
 let resReady: () => void;
 const readyPromise = new Promise<void>((res, rej) => {
@@ -39,6 +40,15 @@ function tryClientStart() {
 }
 tryClientStart();
 
+type NtListener = (nt: typeof networkTable) => void;
+
+const listeners: NtListener[] = [];
+export function onNtChange(listener: NtListener) {
+    listeners.push(listener);
+
+    return () => { listeners.splice(listeners.indexOf(listener), 1) };
+}
+
 ntClient.addListener((key, value, valueType, type, id, flags) => {
     if (type === 'add') {
         console.log(`Added key ${key}`)
@@ -54,7 +64,14 @@ ntClient.addListener((key, value, valueType, type, id, flags) => {
     } else if (type === 'delete') {
         delete networkTable[key];
     }
+
+    for (const listener of listeners) {
+        console.log('Called listener')
+        listener(networkTable);
+    }
 });
+
+
 
 (window as any).nt = networkTable;
 
