@@ -1,10 +1,11 @@
-import React, { CSSProperties, useRef } from "react";
+import React, { CSSProperties, useEffect, useRef } from "react";
 import { useState } from "react"
 import { Loading } from "../loading";
 import { theme } from "../theme";
+import { writeAuto } from "../util/file-io";
 import { autoHelp } from "./auto-help";
-import { useAutos } from "./hooks";
-import { AutoError, AutoInstruction, CompiledAuto, parseAuto } from "./parse-auto";
+import { useAutoNames } from "./hooks";
+import { Auto, AutoError, parseAuto } from "./parse-auto";
 
 const instructionStyle: CSSProperties = {
     color: 'orange'
@@ -59,27 +60,59 @@ const padding: CSSProperties = {
 }
 
 interface Props {
-    value?: string,
-    errors: AutoError[]
-    onChange: (code: string, compiled: CompiledAuto) => void
+    name: string
+    value?: Auto | null,
+    onChange: (newAuto: Auto) => void
 }
 
 export const AutoEditor = (props: Props) => {
+    const errors = props.value?.errors ?? [];
+
+    console.log(JSON.stringify(props));
+
+    const oldProps = useRef(props);
+
+    if (props.name === oldProps.current?.name) {
+        oldProps.current = {
+            ...oldProps.current,
+            value: props.value
+        }
+    }
+
+    useEffect(() => {
+        oldProps.current = { ...props };
+
+        return () => {
+            if (oldProps.current) {
+                writeAuto(oldProps.current!.name, oldProps.current!.value);
+                oldProps.current = { ...props };
+            }
+            
+        }
+    }, [props.name]);
+
+    if (!props.value) {
+        return <Loading />
+    }
+
     return <>
         <div style={{ ...padding, width: '100%' }}>
             <h2>Autonomous Code</h2>
             <div style={codeWrapStyle}>
                 <div style={{ position: 'relative' }}>
-                    <pre style={{ ...sharedStyle, ...preStyle }}>{applySyntaxHighlighting(props.value, props.errors)}</pre>
+                    <pre style={{ ...sharedStyle, ...preStyle }}>{applySyntaxHighlighting(props.value?.source, errors)}</pre>
                     <textarea
                         style={{ ...sharedStyle, ...textAreaStyle }}
-                        rows={(props.value?.split('\n').length ?? 0) + 1}
-                        onChange={e => props.onChange(e.target.value, parseAuto(e.target.value))}
+                        rows={(props.value?.source.split('\n').length ?? 0) + 1}
+                        onChange={e => props.onChange({
+                            source: e.target.value,
+                            instructions: parseAuto(e.target.value).instructions
+                        })}
                         spellCheck={false}
                         autoComplete={'none'}
                         autoCorrect={'none'}
                         autoFocus
-                        value={props.value}/>
+                        value={props.value?.source ?? ''}/>
                 </div>
             </div>
         </div>
@@ -93,9 +126,9 @@ export const AutoEditor = (props: Props) => {
 
             <h2>Code Status</h2>
             <div>
-                { props.errors.length == 0 ? 'Compiled successfully.' : `Failed to compile: ${props.errors.length} error${props.errors.length == 1 ? '' : 's'}`}
+                { errors.length == 0 ? 'Compiled successfully.' : `Failed to compile: ${errors.length} error${errors.length == 1 ? '' : 's'}`}
                 <pre>
-                    { props.errors.map(err => `\nLine ${err.line + 1}: ${err.message}`) }
+                    { errors.map(err => `\nLine ${err.line + 1}: ${err.message}`) }
                 </pre>
             </div>
         </div>

@@ -1,28 +1,47 @@
-import React, { ComponentType, ReactElement, useState } from 'react';
+import React, { ComponentType, ReactElement, useEffect, useRef, useState } from 'react';
+import { AppContext, AppContextInst, defaultContext } from './app-context';
 import { AutoEditor } from './auto/auto-editor';
 import { AutoPage } from './auto/auto-page';
 import { MainPage } from './main/main-page';
 import { TabButton } from './tab-button';
 import { theme } from './theme';
+import { readAutoNames } from './util/file-io';
+import { usePartialState } from './util/use-partial-state';
+
+
+type AppTab = 'main' | 'auto';
 
 export function App() {
-    const [Tab, _setTab] = useState<ComponentType>(() => MainPage);
-    const setTab = (tab: ComponentType) => _setTab(() => tab);
+    const [context, _setContext] = usePartialState<AppContext>(defaultContext);
+
+    useEffect(() => {
+        readAutoNames().then(autoNames => setContext({ autoNames }));
+    }, []);
+
+    const setContextRef = useRef<(ctx: Partial<AppContext>) => void>(() => {});
+    setContextRef.current = _setContext;
+    function setContext(context: Partial<AppContext>) {
+        setContextRef.current!(context)
+    }
+
+
+    const [tab, setTab] = useState<AppTab>('main');
+    const [selectedAuto, setSelectedAuto] = useState<string | null>(null);
 
     return (
-        <div style={{
-            background: theme.semidark
+        <AppContextInst.Provider value={{
+            ...context,
+            setContext
         }}>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <TabButton isSelected={Tab == MainPage} onClick={() => setTab(MainPage)}>main</TabButton>
-                <TabButton isSelected={Tab == AutoPage} onClick={() => setTab(AutoPage)}>auto</TabButton>
+            <div style={{
+                background: theme.semidark
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <TabButton isSelected={tab === 'main'} onClick={() => setTab('main')}>main</TabButton>
+                    <TabButton isSelected={tab === 'auto'} onClick={() => setTab('auto')}>auto</TabButton>
+                </div>
+                {tab === 'auto' ? <AutoPage selected={selectedAuto} onSelectedChange={setSelectedAuto} /> : <MainPage />}
             </div>
-            <div style={{ display: Tab == MainPage ? 'block' : 'none' }}>
-                <MainPage />
-            </div>
-            <div style={{ display: Tab == AutoPage ? 'block' : 'none' }}>
-                <AutoPage />
-            </div>
-        </div>
+        </AppContextInst.Provider>
     );
 }

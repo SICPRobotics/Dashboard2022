@@ -54,16 +54,26 @@ export interface AutoError {
     message: string
 }
 
-export interface CompiledAuto {
-    instructions: AutoInstruction[];
-    errors: AutoError[];
+export interface Auto {
+    source: string,
+    instructions: AutoInstruction[]
+    errors?: AutoError[];
 }
 
-export function parseAuto(code: string) {
+export const defaultAuto: Auto = {
+    source: '',
+    instructions: [],
+}
+
+export interface Autos {
+    [index: string]: Auto | null
+}
+
+export function parseAuto(source: string): Auto {
     let instructions: AutoInstruction[] = [];
     let errors: AutoError[] = [];
 
-    const lines = code.split('\n');
+    const lines = source.split('\n');
     for (let i = 0; i < lines.length; i++) {
         try {
             if (lines[i] != '') {
@@ -77,7 +87,7 @@ export function parseAuto(code: string) {
         }
     }
 
-    return { instructions, errors }
+    return { source, instructions, errors }
 }
 
 function parseNumberArg(arg: string) {

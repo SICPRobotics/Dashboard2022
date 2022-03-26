@@ -5,40 +5,35 @@ import { TabButton } from "../tab-button";
 import { TempTextInput } from "../temp-text-input";
 import { AutoEditor } from "./auto-editor";
 import { AutoFileTab } from "./auto-file-tab";
-import { useAutos } from "./hooks";
-import { AutoError } from "./parse-auto";
+import { useAuto, useAutoNames } from "./hooks";
+import { AutoError, Autos } from "./parse-auto";
 
-export const AutoPage = () => {
-    const [autos, setAutos] = useAutos();
-    const [selected, setSelected] = useState<null | string>(null);
+interface Props {
+    selected: string | null
+    onSelectedChange: (selected: string) => void
+}
+
+export const AutoPage = (props: Props) => {
+    const [autoNames, setAutoNames] = useAutoNames();
+    const [auto, setAuto] = useAuto(props.selected);
     const [addingNew, setAddingNew] = useState(false);
-    const [errors, setErrors] = useState<AutoError[]>([]);
 
     return <div style={{ display: 'flex', flexDirection: 'row' }}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
             {!addingNew ? '' : <TempTextInput 
                 onEnter={(val) => {
-                    if (Object.keys(autos!).includes(val)) {
+                    if (Object.keys(autoNames!).includes(val)) {
                         return;
                     }
 
                     setAddingNew(false);
-                    setAutos({ ...autos, [val]: {
-                        source: '',
-                        instructions: []
-                    } });
-                    setSelected(val);
+                    setAutoNames([...(autoNames ?? []), val]);
+                    props.onSelectedChange(val);
                 }}
                 onCancel={() => setAddingNew(false)} /> }
-            {!autos ? <Loading /> : Object.keys(autos).map((val, i) => <TabButton isSelected={selected == val} onClick={() => setSelected(val)} key={i}>{val}</TabButton>)}
+            {!autoNames ? <Loading /> : autoNames.map((val, i) => <TabButton isSelected={props.selected == val} onClick={() => props.onSelectedChange(val)} key={i}>{val}</TabButton>)}
             <Button onClick={() => setAddingNew(true)}>Add new</Button>
         </div>
-        { selected ? <AutoEditor value={autos![selected].source} errors={errors} onChange={(source, { instructions, errors }) => {
-            setAutos({ ...autos, [selected]: {
-                source,
-                instructions
-            }});
-            setErrors(errors);
-        }} /> : '' }
+        { props.selected ? <AutoEditor name={props.selected} value={auto} onChange={setAuto} /> : '' }
     </div>
 }
