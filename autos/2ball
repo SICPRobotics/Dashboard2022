@@ -1,0 +1,15 @@
+intake out
+wait 2s
+intake off
+drive -0.4 for 5ft
+turn relative -155deg
+arm down
+intake in
+drive 0.4 for 65in
+intake off
+arm up
+turn relative 180deg
+drive 0.4 for 65in
+turn to 0deg
+drive 0.4 for 5ft
+intake out
