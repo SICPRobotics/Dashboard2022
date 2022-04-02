@@ -7,7 +7,22 @@ export const ntClient = new NtClient<NetworkTable>({
     port: 1735
 });
 
-ntClient.connect().then(() => console.log('Connected'));
+async function tryConnect() {
+    try {
+        console.log('Attempting to connect');
+        await ntClient.connect();
+        console.log('Connected')
+    } catch (e) {
+        setTimeout(tryConnect, 1000);
+    }
+}
+tryConnect();
+/*
+ntClient.when(e => true, e => {
+    if (e.type === 'receivedPacket' && e.packet.type === 'entryUpdate') {
+        console.log(`${e.packet.entryValue}`)
+    }
+});*/
 
 (window as any).ntClient = ntClient;
 
@@ -15,8 +30,4 @@ export async function sendAuto(auto: Auto) {
     ntClient.set('/Wolfbyte/auto', JSON.stringify(auto), {
         persistent: true
     });
-}
-
-function wbPath(rest: string) {
-    return '/Wolfbyte/' + rest;
 }
