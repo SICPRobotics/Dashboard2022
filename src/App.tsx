@@ -6,7 +6,7 @@ import { MainPage } from './main/main-page';
 import { TabButton } from './tab-button';
 import { theme } from './theme';
 import { readAutoNames } from './util/file-io';
-import { ntClient, onNtChange } from './util/nt';
+import { ntClient } from './util/nt';
 import { usePartialState } from './util/use-partial-state';
 
 

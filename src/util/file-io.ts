@@ -1,4 +1,3 @@
-import { Client } from 'wolfbyte-networktables';
 import { Auto, AutoInstruction, parseAuto } from '../auto/parse-auto';
 import type { FileHandle } from 'fs/promises';
 import nodePath from 'path';

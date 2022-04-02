@@ -6874,6 +6874,10 @@
   "resolved" "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   "version" "2.6.2"
 
+"networktables@file:../NetworkTables":
+  "resolved" "file:../NetworkTables"
+  "version" "0.1.0"
+
 "no-case@^3.0.4":
   "integrity" "sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg=="
   "resolved" "https://registry.npmjs.org/no-case/-/no-case-3.0.4.tgz"
@@ -9779,12 +9783,6 @@
   "version" "3.1.0"
   dependencies:
     "string-width" "^4.0.0"
-
-"wolfbyte-networktables@file:../../../AppData/Roaming/npm/node_modules/wolfbyte-networktables":
-  "resolved" "file:../../../AppData/Roaming/npm/node_modules/wolfbyte-networktables"
-  "version" "1.7.3"
-  dependencies:
-    "ieee754" "^1.1.8"
 
 "word-wrap@^1.2.3", "word-wrap@~1.2.3":
   "integrity" "sha512-Hz/mrNwitNRh/HUAtM/VT/5VH+ygD6DV7mYKZAtHOrbs8U7lvPS6xf7EJKMF0uW1KJCl0H701g3ZGus+muE5vQ=="

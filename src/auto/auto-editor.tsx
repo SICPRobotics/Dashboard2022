@@ -104,10 +104,7 @@ export const AutoEditor = (props: Props) => {
                     <textarea
                         style={{ ...sharedStyle, ...textAreaStyle }}
                         rows={(props.value?.source.split('\n').length ?? 0) + 1}
-                        onChange={e => props.onChange({
-                            source: e.target.value,
-                            instructions: parseAuto(e.target.value).instructions
-                        })}
+                        onChange={e => props.onChange(parseAuto(e.target.value))}
                         spellCheck={false}
                         autoComplete={'none'}
                         autoCorrect={'none'}

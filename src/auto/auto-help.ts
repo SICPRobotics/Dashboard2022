@@ -4,5 +4,5 @@ wait <duration>
 turn to <heading>
 turn relative <rotation>
 arm <up|down>
-intake <in|out> for <duration>
+intake <in|out|off>
 `;
