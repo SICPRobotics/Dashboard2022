@@ -7,16 +7,8 @@ export const ntClient = new NtClient<NetworkTable>({
     port: 1735
 });
 
-async function tryConnect() {
-    try {
-        console.log('Attempting to connect');
-        await ntClient.connect();
-        console.log('Connected')
-    } catch (e) {
-        setTimeout(tryConnect, 1000);
-    }
-}
-tryConnect();
+ntClient.connect();
+
 /*
 ntClient.when(e => true, e => {
     if (e.type === 'receivedPacket' && e.packet.type === 'entryUpdate') {

@@ -103,7 +103,7 @@ function parseNumberArg(arg: string) {
 }
 
 const cmPerInch = 2.54;
-const encoderUnitsPerCm = 83.75;
+const encoderUnitsPerCm = 69.6;//83.75;
 
 function parseDistanceArg(arg: string) {
     const { number, units } = parseNumberArg(arg);
