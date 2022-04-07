@@ -15,10 +15,10 @@ export const MainPage = () => {
         }
 
         ntClient.set('/Wolfbyte/auto', JSON.stringify(auto));
-    }, [auto])
+    }, [auto?.source])
 
     return <span>
-        <img src='http://10.58.22.2:1181/?action=stream' />
+        {/*<img src='http://10.58.22.2:1181/?action=stream' />*/}
         <select value={selectedAuto ?? ''} onChange={(e) => setContext({ selectedAuto: e.target.value })}>
             {autoNames?.map((val, i) => <option value={val} key={i}>{val}</option>)}
         </select>
