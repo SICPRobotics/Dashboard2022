@@ -1,20 +1,21 @@
 intake out
-wait 2s
+wait 500ms
 intake off
-drive -0.4 for 5ft
-wait 500ms
-turn relative -140deg
-wait 500ms
+drive -0.6 for 5ft
+wait 200ms
+turn to 220deg
+wait 200ms
 arm down
 intake in
-drive 0.4 for 65in
+drive 0.4 for 30in
 intake off
+drive -0.4 for 30in
+wait 200ms
 arm up
-turn relative 180deg
-wait 500ms
-drive 0.4 for 65in
-wait 500ms
+wait 200ms
 turn to 0deg
-wait 500ms
-drive 0.4 for 5ft
+wait 200ms
+drive 0.6 for 3s
 intake out
+wait 500ms
+intake off
